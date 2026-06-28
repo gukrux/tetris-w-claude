@@ -97,5 +97,4 @@ jobs:
             - Si el issue menciona bugs específicos, explora qué podría causar ese comportamiento en la lógica de juego
             - Si pide una feature, sugiere cómo implementarla dentro de la arquitectura actual (sin dependencias externas)
             - Usa markdown para formatear bien el diagnóstico
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          anthropic_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
