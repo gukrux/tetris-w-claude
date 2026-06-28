@@ -1,0 +1,101 @@
+name: Issue Analyzer
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+  id-token: write
+
+jobs:
+  analyze-issue:
+    runs-on: ubuntu-latest
+    name: Analyze and Triage Issue
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Analyze issue with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          prompt: |
+            Analizá el siguiente issue del repositorio Tetris (juego vanilla JavaScript sin dependencias):
+
+            **Número del issue:** ${{ github.event.issue.number }}
+            **Título:** ${{ github.event.issue.title }}
+            **Cuerpo:** ${{ github.event.issue.body }}
+
+            Tu tarea tiene dos partes:
+
+            ## 1. Asignar labels al issue
+
+            Elegí 1-3 labels de esta lista según el contenido del issue:
+            - `bug` — algo no funciona como debería
+            - `enhancement` — nueva funcionalidad o mejora
+            - `game-mechanics` — lógica central del juego
+            - `ui/ux` — interfaz visual o experiencia
+            - `controls` — controles de teclado
+            - `scoring` — puntuación, líneas, niveles
+            - `performance` — velocidad, FPS, rendering
+            - `question` — pregunta general
+            - `duplicate` — ya existe un issue similar
+
+            Ejecutá este comando (reemplazá label1,label2,label3 con los elegidos):
+            ```
+            gh issue edit ${{ github.event.issue.number }} --add-label "label1,label2" --repo ${{ github.repository }}
+            ```
+
+            ## 2. Postear diagnóstico técnico
+
+            Posteá un comentario en el issue con un diagnóstico técnico detallado usando este formato:
+
+            ```markdown
+            ## 🤖 Análisis automático de Claude
+
+            **Labels asignados:** [los labels que elegiste]
+
+            ### Descripción del problema
+            [Síntesis clara del problema basada en el título y cuerpo del issue]
+
+            ### Área del código afectada
+            Indicá qué archivos y funciones se ven afectados:
+            - `game.js` — funciones específicas (ej: `tryRotate()`, `clearLines()`, `loop()`)
+            - `style.css` — estilos específicos (ej: colores, flexbox, canvas styling)
+            - `index.html` — elementos del DOM (ej: canvas, botones, overlays)
+
+            ### Arquitectura relevante
+            Recordá:
+            - Board: matriz 20×10, `board[y][x]` con valores 0-7
+            - Piezas: 7 tetrominos (I, O, T, S, Z, J, L) en matrices 4×4
+            - Rotación: `rotateCW()` con wall kicks en `tryRotate()`
+            - Líneas: `clearLines()` detecta filas completas y ajusta puntaje
+            - Loop: `requestAnimationFrame` a 60 FPS
+            - Ghost: pieza fantasma con `globalAlpha = 0.2`
+
+            ### Enfoque sugerido para la solución
+            [Pasos concretos y técnicos que se deberían seguir para resolver el issue]
+
+            [Aclaraciones o consideraciones especiales si aplican]
+
+            ---
+            *Diagnóstico generado automáticamente para guiar la implementación.*
+            ```
+
+            Ejecutá este comando para postear el comentario:
+            ```
+            gh issue comment ${{ github.event.issue.number }} --body "[el contenido del comentario que creaste]" --repo ${{ github.repository }}
+            ```
+
+            ## Notas importantes
+            - Sé técnico y detallado — este diagnóstico guiará la implementación
+            - Si el issue menciona bugs específicos, explora qué podría causar ese comportamiento en la lógica de juego
+            - Si pide una feature, sugiere cómo implementarla dentro de la arquitectura actual (sin dependencias externas)
+            - Usa markdown para formatear bien el diagnóstico
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          anthropic_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

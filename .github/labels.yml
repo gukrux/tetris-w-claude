@@ -1,0 +1,39 @@
+# GitHub Labels Configuration for Tetris Repository
+# Reference documentation: https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work
+
+labels:
+  - name: bug
+    color: d73a4a
+    description: Algo no funciona como debería
+
+  - name: enhancement
+    color: a2eeef
+    description: Nueva funcionalidad o mejora
+
+  - name: game-mechanics
+    color: "7057ff"
+    description: Lógica central del juego (board, pieces, scoring, collisions)
+
+  - name: ui/ux
+    color: e4e669
+    description: Interfaz visual o experiencia de usuario
+
+  - name: controls
+    color: 0075ca
+    description: Controles de teclado y entrada de usuario
+
+  - name: scoring
+    color: cfd3d7
+    description: Sistema de puntuación, líneas y niveles
+
+  - name: performance
+    color: e99695
+    description: Velocidad, FPS, optimizaciones de rendering
+
+  - name: question
+    color: d876e3
+    description: Pregunta general o solicitud de aclaración
+
+  - name: duplicate
+    color: cfd3d7
+    description: Ya existe un issue similar
