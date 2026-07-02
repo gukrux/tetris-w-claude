@@ -209,3 +209,39 @@ kbd {
 #restart-btn:hover {
   background: #9bbdff;
 }
+
+/* ---- Power-ups ---- */
+.freeze-value {
+  color: #4dd0e1;
+}
+
+.freeze-value.hidden {
+  display: none;
+}
+
+.powerup-toast {
+  position: absolute;
+  top: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s, top 0.2s;
+  pointer-events: none;
+}
+
+.powerup-toast.hidden {
+  display: none;
+}
+
+.powerup-toast.show {
+  opacity: 1;
+  top: -12px;
+}
